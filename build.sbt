@@ -1,20 +1,26 @@
 import Dependencies._
 
-ThisBuild / scalaVersion := "2.12.8"
+classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.AllLibraryJars
+name := "counter"
+
+ThisBuild / scalaVersion := "2.12.10"
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / organization := "com.example"
 ThisBuild / organizationName := "example"
 
-lazy val root = (project in file("."))
-  .settings(
-    name := "Akka Http Skeleton",
-    libraryDependencies ++= Seq(
-      akkaHttp,
-      akkaStream,
-      akkaTestKit % Test,
-      akkaHttpTestKit % Test,
-      specs2Core % Test
-    )
-  )
+libraryDependencies ++= Seq(
+  akkaHttp,
+  akkaStream,
+  specs2Core % Test,
+  spray,
+  guava,
+  scalatest
+)
 
-// See https://www.scala-sbt.org/1.x/docs/Using-Sonatype.html for instructions on how to publish to Sonatype.
+assemblyJarName in assembly := name.value + ".jar"
+
+assemblyMergeStrategy in assembly := {
+  case x =>
+    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    oldStrategy(x)
+}
